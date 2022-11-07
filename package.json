@@ -1,0 +1,25 @@
+{
+  "name": "electron-practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "watch": "nodemon --exec electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ag502/electron-practice.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ag502/electron-practice/issues"
+  },
+  "homepage": "https://github.com/ag502/electron-practice#readme",
+  "devDependencies": {
+    "electron": "^21.2.2",
+    "nodemon": "^2.0.20"
+  }
+}
