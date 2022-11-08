@@ -1,5 +1,5 @@
 // Modules
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, webContents } = require("electron");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -10,6 +10,8 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 800,
+    x: 100,
+    y: 100,
     webPreferences: {
       // --- !! IMPORTANT !! ---
       // Disable 'contextIsolation' to allow 'nodeIntegration'
@@ -21,9 +23,52 @@ function createWindow() {
 
   // Load index.html into the new BrowserWindow
   mainWindow.loadFile("index.html");
+  // mainWindow.loadURL("http://httpbin.org/basic-auth/user/passwd");
 
   // Open DevTools - Remove for PRODUCTION!
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
+
+  let wc = mainWindow.webContents;
+
+  // console.log(wc);
+  // console.log(webContents.getAllWebContents());
+
+  wc.on("did-finish-load", () => {
+    console.log("Content fully loaded");
+  });
+
+  wc.on("dom-ready", () => {
+    console.log("DOM Ready");
+  });
+
+  wc.on("new-window", (e, url) => {
+    e.preventDefault();
+    console.log(`Creating new window for: ${url}`);
+  });
+
+  wc.on("before-input-event", (e, input) => {
+    console.log(`${input.key}: ${input.type}`);
+  });
+
+  wc.on("context-menu", (e, params) => {
+    // console.log(
+    //   `Context menu opened on: ${params.mediaType} at x: ${params.x}, y:${params.y}`
+    // );
+    // console.log(`User selected text: ${params.selectionText}`);
+    // console.log(`Selection can be copied: ${params.editFlags.canCopy}`);
+    let selectionText = params.selectionText;
+    wc.executeJavaScript(`alert("${selectionText}")`);
+  });
+
+  // wc.on("did-navigate", (e, url, statusCode, message) => {
+  //   console.log(`Navigated to: ${url}`);
+  //   console.log(statusCode);
+  // });
+
+  // wc.on("login", (e, request, authInfo, callback) => {
+  //   console.log("Logging in:");
+  //   callback("user", "passwd");
+  // });
 
   // Listen for window being closed
   mainWindow.on("closed", () => {
