@@ -1,5 +1,5 @@
 // Modules
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, globalShortcut } = require("electron");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -24,6 +24,15 @@ function createWindow() {
 
   // Open DevTools - Remove for PRODUCTION!
   mainWindow.webContents.openDevTools();
+
+  // globalShortcut.register("G", () => {
+  //   console.log("User pressed G");
+  // });
+
+  globalShortcut.register("CommandOrControl+G", () => {
+    console.log("User pressed G with a combination");
+    globalShortcut.unregister("CommandOrControl+G");
+  });
 
   // Listen for window being closed
   mainWindow.on("closed", () => {
