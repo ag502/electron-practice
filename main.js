@@ -1,5 +1,5 @@
 // Modules
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, dialog } = require("electron");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -23,7 +23,40 @@ function createWindow() {
   mainWindow.loadFile("index.html");
 
   // Open DevTools - Remove for PRODUCTION!
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
+
+  mainWindow.webContents.on("did-finish-load", () => {
+    // dialog
+    //   .showOpenDialog(mainWindow, {
+    //     buttonLabel: "Select a photo",
+    //     defaultPath: app.getPath("home"),
+    //     properties: [
+    //       "multiSelections",
+    //       "createDirectory",
+    //       "openFile",
+    //       "openDirectory",
+    //     ],
+    //   })
+    //   .then((result) => {
+    //     console.log(result);
+    //   });
+    // dialog.showSaveDialog({}).then((result) => {
+    //   console.log(result);
+    // });
+
+    const answers = ["Yes", "No", "Maybe"];
+
+    dialog
+      .showMessageBox({
+        title: "Message Box",
+        message: "Please select an option",
+        detail: "Message details",
+        buttons: answers,
+      })
+      .then((result) => {
+        console.log(`User selected: ${answers[result.response]}`);
+      });
+  });
 
   // Listen for window being closed
   mainWindow.on("closed", () => {
