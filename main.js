@@ -1,5 +1,5 @@
 // Modules
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, session } = require("electron");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -7,6 +7,19 @@ let mainWindow;
 
 // Create a new BrowserWindow when `app` is ready
 function createWindow() {
+  let ses = session.defaultSession;
+
+  let getCookies = () => {
+    ses.cookies
+      .get({})
+      .then((cookies) => {
+        console.log(cookies);
+      })
+      .catch((errors) => {
+        console.log(errors);
+      });
+  };
+
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 800,
@@ -21,6 +34,23 @@ function createWindow() {
 
   // Load index.html into the new BrowserWindow
   mainWindow.loadFile("index.html");
+  // mainWindow.loadURL("https://github.com");
+
+  let cookie = {
+    url: "https://myappdomain.com",
+    name: "cookie1",
+    value: "electron",
+    expirationDate: 1700391341.670771,
+  };
+
+  ses.cookies.set(cookie).then(() => {
+    console.log("cookie1 set");
+    getCookies();
+  });
+
+  // mainWindow.webContents.on("did-finish-load", (e) => {
+  //   getCookies();
+  // });
 
   // Open DevTools - Remove for PRODUCTION!
   mainWindow.webContents.openDevTools();
