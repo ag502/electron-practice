@@ -1,12 +1,14 @@
 // Modules
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, session } = require("electron");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow;
+let mainWindow, secWindow;
 
 // Create a new BrowserWindow when `app` is ready
 function createWindow() {
+  // let customSes = session.fromPartition("persist:part1");
+
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 800,
@@ -19,15 +21,48 @@ function createWindow() {
     },
   });
 
+  secWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    x: 200,
+    y: 200,
+    webPreferences: {
+      // --- !! IMPORTANT !! ---
+      // Disable 'contextIsolation' to allow 'nodeIntegration'
+      // 'contextIsolation' defaults to "true" as from Electron v12
+      contextIsolation: false,
+      nodeIntegration: true,
+      // session: customSes,
+      partition: "persist:part1",
+    },
+  });
+
+  let ses = mainWindow.webContents.session;
+  let ses2 = secWindow.webContents.session;
+  let defaultSes = session.defaultSession;
+
+  ses.clearStorageData();
+
+  // console.log(ses);
+  // console.log(ses2);
+
+  // console.log(Object.is(ses, customSes));
+
   // Load index.html into the new BrowserWindow
   mainWindow.loadFile("index.html");
+  secWindow.loadFile("index.html");
 
   // Open DevTools - Remove for PRODUCTION!
   mainWindow.webContents.openDevTools();
+  secWindow.webContents.openDevTools();
 
   // Listen for window being closed
   mainWindow.on("closed", () => {
     mainWindow = null;
+  });
+
+  secWindow.on("closed", () => {
+    secWindow = null;
   });
 }
 
