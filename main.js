@@ -1,9 +1,14 @@
 // Modules
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, Menu } = require("electron");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+
+let contextMenu = Menu.buildFromTemplate([
+  { label: "Item 1" },
+  { role: "editMenu" },
+]);
 
 // Create a new BrowserWindow when `app` is ready
 function createWindow() {
@@ -24,6 +29,10 @@ function createWindow() {
 
   // Open DevTools - Remove for PRODUCTION!
   mainWindow.webContents.openDevTools();
+
+  mainWindow.webContents.on("context-menu", (e) => {
+    contextMenu.popup(mainWindow);
+  });
 
   // Listen for window being closed
   mainWindow.on("closed", () => {
