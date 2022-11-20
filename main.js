@@ -1,12 +1,31 @@
 // Modules
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, Tray, Menu } = require("electron");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow;
+let mainWindow, tray;
+
+let trayMenu = Menu.buildFromTemplate([{ label: "Item 1" }, { role: "quit" }]);
+
+function createTray() {
+  tray = new Tray("trayTemplate@2x.png");
+  tray.setToolTip("Tray Detail");
+
+  tray.setContextMenu(trayMenu);
+
+  tray.on("click", (e) => {
+    if (e.shiftKey) {
+      app.quit();
+    } else {
+      mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
+    }
+  });
+}
 
 // Create a new BrowserWindow when `app` is ready
 function createWindow() {
+  createTray();
+
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 800,
