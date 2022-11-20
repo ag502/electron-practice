@@ -5,6 +5,7 @@ const { app, BrowserWindow } = require("electron");
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
+console.log(desktopCapturer);
 // Create a new BrowserWindow when `app` is ready
 function createWindow() {
   mainWindow = new BrowserWindow({
