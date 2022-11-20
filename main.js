@@ -1,5 +1,5 @@
 // Modules
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, screen } = require("electron");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -7,9 +7,29 @@ let mainWindow;
 
 // Create a new BrowserWindow when `app` is ready
 function createWindow() {
+  let displays = screen.getAllDisplays();
+
+  let primaryDisplay = screen.getPrimaryDisplay();
+
+  // console.log(`${displays[0].size.width} x ${displays[0].size.height}`);
+  // console.log(`${displays[0].bounds.x}, ${displays[0].bounds.y}`);
+
+  // console.log(`${displays[1].size.width} x ${displays[1].size.height}`);
+  // console.log(`${displays[1].bounds.x}, ${displays[1].bounds.y}`);
+
+  // screen.on("display-metrics-changed", (e, display, metricsChanged) => {
+  //   console.log(metricsChanged);
+  // });
+
+  // setInterval(() => {
+  //   console.log(screen.getCursorScreenPoint());
+  // }, 100);
+
   mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 800,
+    x: primaryDisplay.bounds.x,
+    y: primaryDisplay.bounds.y,
+    width: primaryDisplay.width / 2,
+    height: primaryDisplay.height / 2,
     webPreferences: {
       // --- !! IMPORTANT !! ---
       // Disable 'contextIsolation' to allow 'nodeIntegration'
