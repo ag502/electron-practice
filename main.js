@@ -16,6 +16,7 @@ function createWindow() {
       // 'contextIsolation' defaults to "true" as from Electron v12
       contextIsolation: false,
       nodeIntegration: true,
+      enableRemoteModule: true,
     },
   });
 
